@@ -23,6 +23,7 @@
 import threading
 from collections import deque
 import sys, traceback
+import collections
 
 # Set this to True for incredibly verbose IOU resolution output
 TRACE = False
@@ -33,7 +34,7 @@ def _LOG(*args):
     if not TRACE:
         return
 
-    print " ".join([str(a) for a in args])
+    print(" ".join([str(a) for a in args]))
 
 def _resolve(iou, handler, value):
     '''
@@ -52,7 +53,7 @@ def _resolve(iou, handler, value):
         return
     
     # if the handler isn't a callable, resolve the iou with it
-    if not callable(handler):
+    if not isinstance(handler, collections.Callable):
         _LOG("handler", handler, "treated as constant for", iou)
         iou.fulfill(handler)
         return
@@ -70,7 +71,7 @@ def _resolve(iou, handler, value):
             #result.add_rejected_handler(iou.reject).name += "-chained"
             result._chained_IOUs.append(iou)
             return
-    except Exception, e:
+    except Exception as e:
         _LOG("rejecting", iou, "with failure of", handler, "because", e)
         iou.reject(e)
     else:
@@ -323,7 +324,7 @@ if __name__ == "__main__":
     
     i.fulfill(6)
 
-    print i3.is_settled
+    print(i3.is_settled)
 
     #i2.fulfill("paid")
 

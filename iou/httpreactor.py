@@ -27,9 +27,9 @@ import threading
 
 import requests
 
-from iou import IOU
-from iou_reactor_base import IOUTransportError, IOUReactorTask
-from iou_reactor_base import PRIORITY_NORMAL, PRIORITY_BACKGROUND, PRIORITY_HIGH
+from .iou import IOU
+from .iou_reactor_base import IOUTransportError, IOUReactorTask
+from .iou_reactor_base import PRIORITY_NORMAL, PRIORITY_BACKGROUND, PRIORITY_HIGH
 
 # Defines the number of seconds a runloop should sleep before running again
 RUNLOOP_WAIT_DELAY = 0.1
@@ -218,7 +218,7 @@ class IOUHTTPReactor(object):
         try:
             response = method(task.request_url, **task._request_kwargs())
             response.raise_for_status()
-        except Exception, e:
+        except Exception as e:
             import traceback;traceback.print_exc()
             #TODO: make exceptions specific
             encapuslated = IOUHTTPTransportError(e.message)
@@ -255,13 +255,13 @@ if __name__ == "__main__":
     task = IOUHTTPReactorTask('http://apple.com')
     reactor.start()
     
-    print "adding task"
-    def log_result(result): print result; reactor.stop()
-    def log_error(err): print "ERROR:", err; reactor.stop()
+    print("adding task")
+    def log_result(result): print(result); reactor.stop()
+    def log_error(err): print("ERROR:", err); reactor.stop()
     p = reactor.submit_task(task)
     p.add_handlers(log_result, log_error)
     
-    print "waiting..."
+    print("waiting...")
 
     p.wait()
     #reactor.run(True)
